@@ -8,13 +8,13 @@ It allows developers to easily define, register, and execute middlewares at both
 ## 📦 Installation
 
 ```bash
-npm install @baguettejs/middlewares
+bun add @baguettejs/middlewares
 ```
 
 or
 
 ```bash
-pnpm add @baguettejs/middlewares
+bun add @baguettejs/middlewares
 ```
 
 ---
@@ -29,8 +29,7 @@ A middleware can modify the request, perform checks, or log information before a
 #### Example
 
 ```ts
-import { Controller, Get } from '@baguettejs/core';
-import { Middleware } from '@baguettejs/middlewares';
+import { Controller, Get, Middleware } from '@baguettejs/core';
 
 function logger(req: any, res: any, next: Function) {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
@@ -57,7 +56,6 @@ export class UserController {
 You can also register global middlewares that run before every route:
 
 ```ts
-import { useGlobalMiddleware } from '@baguettejs/middlewares';
 import { App } from '@baguettejs/core';
 
 function cors(req: any, res: any, next: Function) {
@@ -65,9 +63,10 @@ function cors(req: any, res: any, next: Function) {
   next();
 }
 
-useGlobalMiddleware(cors);
-
 const app = new App();
+app.use(cors);
+await app.bootstrap('src/controllers');
+app.listen(3000);
 app.bootstrap('src/controllers');
 ```
 
